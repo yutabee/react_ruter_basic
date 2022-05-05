@@ -1,7 +1,7 @@
 import { Switch, Route } from 'react-router-dom';
 import { Home } from '../Home';
-import { Page2 } from '../Page2';
 import { page1Routes } from './Page1Routes';
+import { page2Routes } from './Page2Routes';
 
 export const Router = () => {
   return (
@@ -16,21 +16,42 @@ export const Router = () => {
           { match: { url } } //render関数の引数には自動でpropsが定義されている.引数なしで直接パス書いてもネストは作れる
         ) => (
           <Switch>
-            {page1Routes.map((route) => (
-              <Route
-                key={route.path}
-                exact={route.exact}
-                path={`${url}${route.path}`}
-              >
-                {route.children}
-              </Route>
-            ))}
+            {page1Routes.map((route) => {
+              const { path, exact, children } = route;
+              return (
+                <Route
+                  key={path}
+                  exact={exact}
+                  path={`${url}${path}`}
+                >
+                  {children}
+                </Route>
+              );
+            })}
           </Switch>
         )}
       />
-      <Route path="/page2">
-        <Page2 />
-      </Route>
+      <Route
+        path="/page2"
+        render={(
+          { match: { url } } //render関数の引数には自動でpropsが定義されている.引数なしで直接パス書いてもネストは作れる
+        ) => (
+          <Switch>
+            {page2Routes.map((route) => {
+              const { path, exact, children } = route;
+              return (
+                <Route
+                  key={path}
+                  exact={exact}
+                  path={`${url}${path}`}
+                >
+                  {children}
+                </Route>
+              );
+            })}
+          </Switch>
+        )}
+      />
     </Switch>
   );
 };
